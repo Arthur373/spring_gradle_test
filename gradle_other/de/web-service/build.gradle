@@ -1,0 +1,201 @@
+buildscript {
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE")
+        classpath 'com.bmuschko:gradle-docker-plugin:3.0.3'
+        classpath "com.netflix.nebula:nebula-docker-plugin:latest.release"
+    }
+}
+apply plugin: 'application'
+
+apply plugin: 'com.bmuschko.docker-java-application'
+apply plugin: 'nebula.docker'
+
+mainClassName = 'com.synisys.idm.de.web.Application'
+
+dependencies {
+
+    compile project(':de-service-impl')
+    compile project(':de-service-api')
+
+    //classifier
+    compile(group: 'com.synisys.idm', name: 'classifier-service-api', version: project.ext.'classifier-service-api') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+    compile(group: 'com.synisys.idm', name: 'classifier-service-client',
+            version: project.ext.'classifier-service-client') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+    //shared
+    compile(group: 'com.synisys.idm', name: 'skynet-shared-concepts', version: project.ext.'skynet-shared-concepts')
+    compile(group: 'com.synisys.idm', name: 'shared-concepts', version: project.ext.'shared-concepts')
+    compile(group: 'com.synisys.skynet', name: 'common-security', version: project.ext.'common-security')
+    compile(group: 'com.synisys.skynet', name: 'common-utilities', version: project.ext.'common-utilities')
+
+    //entity-search
+    compile(group: 'com.synisys.idm', name: 'entity-search-service-client', version: project.ext.'entity-search-service-client') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+    compile(group: 'org.postgresql', name: 'postgresql', version: '42.2.9')
+
+    //kb
+    compile(group: 'com.synisys.idm', name: 'kb-service-api', version: project.ext.'kb-service-api') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+    compile(group: 'com.synisys.idm', name: 'kb-service-client', version: project.ext.'kb-service-client') {
+        exclude(module: 'jsr311-api')
+        exclude(module: 'skynet-shared-concepts')
+    }
+    testCompile(group: 'com.synisys.idm', name: 'kb-service-server', version: project.ext.'kb-service-server') {
+        exclude(module: 'skynet-shared-concepts')
+        exclude(module: 'jsr311-api')
+        exclude(module: 'spring-boot-starter-security')
+    }
+
+    compile(group: 'io.lettuce', name: 'lettuce-core', version: '5.1.5.RELEASE')
+    compile(group: 'io.projectreactor', name: 'reactor-core', version: '3.1.6.RELEASE')
+    //vc
+    compile(group: 'com.synisys.idm', name: 'validation-calculation-service-client',
+            version: project.ext.'validation-calculation-service-client') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+    compile(group: 'com.synisys.idm', name: 'validation-calculation-service-api',
+            version: project.ext.'validation-calculation-service-api') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+
+    //workflow
+    compile(group: 'com.synisys.idm', name: 'idm-workflow-service-api', version: '1.11.0')
+    compile(group: 'com.synisys.idm', name: 'idm-workflow-service-client', version: '1.11.0')
+
+    //um
+    compile(group: 'com.synisys.idm', name: 'idm-um-api', version: project.ext.'idm-um-api')
+    compile(group: 'com.synisys.idm', name: 'idm-um-client', version: project.ext.'idm-um-client')
+
+    compile(group: 'com.synisys.util', name: 'idm-services-messaging-client',
+            version: project.ext.'idm-services-messaging-client')
+
+    compile(group: 'org.elasticsearch', name: 'elasticsearch', version: project.ext.versions.elastic)
+    compile(group: 'org.elasticsearch.client', name: 'transport', version: project.ext.versions.elastic)
+
+    compile(group: 'org.springframework', name: 'spring-web', version: project.ext.'spring-web')
+    compile(group: 'org.springframework', name: 'spring-webmvc', version: project.ext.'spring-webmvc')
+    compile(group: 'org.springframework', name: 'spring-context', version: project.ext.'spring-context')
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web',
+            version: project.ext.'spring-boot-starter-web') {
+        exclude(module: 'spring-boot-starter-logging')
+        exclude(module: 'spring-boot-starter-tomcat')
+    }
+    compile(group: 'org.springframework.boot', name: 'spring-boot-autoconfigure',
+            version: project.ext.'spring-boot-autoconfigure')
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-jetty',
+            version: project.ext.'spring-boot-starter-jetty')
+
+
+    compile(group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: project.ext.versions.jackson)
+
+    compile(group: 'io.fabric8', name: 'spring-cloud-kubernetes-core', version: '0.1.4')
+
+    //discovery
+    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka',
+            version: project.ext.'spring-cloud-starter-eureka')
+
+    //tracing
+    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth',
+            version: project.ext.'spring-cloud-starter-sleuth')
+
+    compile(group: 'com.synisys.util', name: 'consul-client', version: project.ext.'consul-client')
+
+    //okhttp3
+    compile(group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.14.9')
+
+    compile(group: 'com.zaxxer', name: 'HikariCP', version: '3.2.0')
+
+    compile(group: 'com.synisys.idm', name: 'kb-service-generator', version: '3.16.0')
+
+    compile(group: 'com.synisys.skynet', name: 'skynet-bootstrap', version: project.ext.'skynet-bootstrap')
+
+    compile(group: 'com.synisys.idm', name: 'entity-persistence-api',
+            version: project.ext.'entity-persistence-api') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+    compile(group: 'com.synisys.idm', name: 'entity-persistence-impl',
+            version: project.ext.'entity-persistence-impl') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+
+    //log4j2 start
+    compile(group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.0')
+    compile(group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.0')
+    compile(group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.17.0')
+    compile(group: 'org.apache.logging.log4j', name: 'log4j-jcl', version: '2.17.0')
+    compile(group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.17.0')
+    compile(group: 'org.apache.logging.log4j', name: 'log4j-jul', version: '2.17.0')
+    //log4j2 end
+
+    //prometheus
+    compile(group: 'io.prometheus', name: 'simpleclient_log4j2', version: '0.6.0')
+
+    testCompile(group: 'org.springframework', name: 'spring-test', version: project.ext.'spring-test')
+    testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test',
+            version: project.ext.'spring-boot-starter-test') {
+        exclude(module: 'commons-logging')
+    }
+    testCompile(group: 'com.synisys.idm.multidatasource', name: 'idm-multidatasource-provider',
+            version: project.ext.'idm-multidatasource-provider')
+
+
+    testCompile(group: 'com.jayway.jsonpath', name: 'json-path', version: '2.2.0')
+    testCompile(group: 'org.hsqldb', name: 'hsqldb', version: '2.3.4')
+}
+
+applicationDefaultJvmArgs = [
+        "-Xmx400m",
+        "-Xms400m",
+        "-XX:MetaspaceSize=150m",
+        "-XX:MaxMetaspaceSize=150m",
+        "-XX:ParallelGCThreads=1",
+        "-XX:CICompilerCount=2",
+        "-XX:MaxGCPauseMillis=300",
+        "-Dlog4j.configurationFile=log4j2-kube.xml",
+        "-XX:MaxDirectMemorySize=100m",
+        "-XX:CompressedClassSpaceSize=150m",
+        "-Xss512k",
+        "-XX:+DisableExplicitGC",
+        "-Dfile.enconding=UTF-8",
+        "-DIGNITE_EXCHANGE_HISTORY_SIZE=10",
+        "-DIGNITE_AFFINITY_HISTORY_SIZE=10",
+        "-DIGNITE_DISCOVERY_HISTORY_SIZE=10",
+        "-DIGNITE_DISCOVERY_CLIENT_RECONNECT_HISTORY_SIZE=10",
+]
+
+docker {
+    javaApplication {
+        tag = "regdb.synisys.com/${project.group}/${project.applicationName}:${project.version}"
+        ports = [8081]
+    }
+    registryCredentials {
+        url = 'regdb.synisys.com'
+        username = credentials.username
+        password = credentials.password
+        email = 'razmik.mkrtchyann@synisys.com'
+    }
+}
+
+nebulaDocker {
+    maintainerEmail = 'razmik.mkrtchyann@synisys.com'
+    dockerUrl = 'tcp://swarm-node1:2375'
+    dockerBase = 'regdb.synisys.com/base/amzjdk:8.282'
+    dockerRepo = [test: 'https://regdb.synisys.com', prod: 'https://regdb.synisys.com', dev: 'https://regdb.synisys.com']
+}
+
+afterEvaluate { project ->
+    project.rootProject.tasks.final.finalizedBy project.tasks.getByName('dockerPushImage')
+}
+
+configurations {
+    compile.exclude module: "spring-cloud-starter-config"
+    compile.exclude module: "spring-cloud-starter-consul-config"
+    compile.exclude module: "spring-cloud-starter-consul-all"
+    compile.exclude module: "spring-boot-starter-tomcat"
+    compile.exclude module: "skynet-shared-concepts"
+}

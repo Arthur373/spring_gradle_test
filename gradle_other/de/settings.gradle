@@ -1,0 +1,8 @@
+rootProject.name = 'de-service'
+include ':de-service-api'
+include ':de-service-impl'
+include ':de-web-service'
+
+project(':de-service-api').projectDir = "$rootDir/de-service-api" as File
+project(':de-service-impl').projectDir = "$rootDir/de-service-impl" as File
+project(':de-web-service').projectDir = "$rootDir/de-web-service" as File

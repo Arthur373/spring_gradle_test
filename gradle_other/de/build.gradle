@@ -1,0 +1,100 @@
+buildscript {
+    apply from: 'http://gerrit.synisys.com/plugins/download-file/download?project=skynet-scripts&branch=master&file=src/main/gradle/build-configurator.gradle', to: buildscript
+}
+
+apply from: 'http://gerrit.synisys.com/plugins/download-file/download?project=skynet-scripts&branch=master&file=src/main/gradle/configurator.gradle', to: allprojects
+
+allprojects { project ->
+
+    apply plugin: 'maven'
+    apply plugin: 'idea'
+
+    group = 'com.synisys.idm'
+
+    ext {
+        versions = [
+                slf4j  : '1.7.10',
+                feign  : '8.18.0',
+                jackson: '2.8.1',
+                cfg4j  : '4.4.0',
+                elastic: '5.1.1'
+        ]
+    }
+
+    configurations {
+        compile.exclude group: 'ch.qos.logback'
+        compile.exclude module: 'jsr311-api'
+        compile.exclude module: 'mockito-all'
+        all {
+            resolutionStrategy {
+                force 'com.fasterxml.jackson.core:jackson-core:2.6.3 ',
+                        'com.fasterxml.jackson.core:jackson-databind:2.8.1'
+            }
+        }
+    }
+}
+
+subprojects { project ->
+    buildscript {
+        apply from: 'http://gerrit.synisys.com/plugins/download-file/download?project=skynet-scripts&branch=master&file=src/main/gradle/build-configurator.gradle', to: project.buildscript
+    }
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+
+    sourceSets {
+        main {
+            java { srcDirs = [] }    // no source dirs for the java compiler
+            groovy { srcDirs = ["src/main/java", "src/main/groovy"] }
+            // compile   everything in src/ with groovy
+        }
+        test {
+            java { srcDirs = [] }
+            groovy {
+                srcDirs = ["src/test/java", "src/test/groovy"]
+                output.resourcesDir = "build/classes/test"
+                outputDir = new File(buildDir, "classes/test")
+            }
+        }
+    }
+
+    dependencies {
+        compile(group: 'com.synisys.idm', name: 'auth-client', version: project.ext.'auth-client') {
+            exclude(module: 'skynet-shared-concepts')
+        }
+        compile(group: 'com.google.code.findbugs', name: 'jsr305', version: '2.0.2')
+        compile(group: 'com.google.guava', name: 'guava', version: project.ext.'guava')
+        compile(group: 'javax.cache', name: 'cache-api', version: '1.0.0')
+
+        compile(group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.10')
+
+        testCompile(group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3')
+        testCompile(group: 'junit', name: 'junit', version: '4.12') {
+            exclude(module: 'hamcrest-core')
+        }
+        testCompile(group: 'org.jmockit', name: 'jmockit', version: '1.15')
+    }
+
+    configurations {
+        compile.exclude group: 'ch.qos.logback'
+        compile.exclude module: 'jsr311-api'
+        compile.exclude module: 'mockito-all'
+        compile.exclude module: 'spring-cloud-starter-config'
+        compile.exclude module: 'spring-cloud-starter-consul-config'
+        compile.exclude module: 'spring-cloud-starter-consul-all'
+        compile.exclude module: 'spring-cloud-sleuth-zipkin'
+        compile.exclude module: 'spring-cloud-config-server'
+        all {
+            resolutionStrategy {
+                force 'com.fasterxml.jackson.core:jackson-core:2.6.3 ',
+                        'com.fasterxml.jackson.core:jackson-databind:2.8.1'
+            }
+        }
+    }
+}

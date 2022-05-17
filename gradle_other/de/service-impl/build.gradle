@@ -1,0 +1,87 @@
+description = ''
+dependencies {
+    compile project(':de-service-api')
+
+    compile(group: 'com.synisys.skynet', name: 'common-utilities', version: project.ext.'common-utilities')
+
+    //entity search
+    compile(group: 'com.synisys.idm', name: 'entity-search-service-client',
+            version: project.ext.'entity-search-service-client') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+
+    compile(group: 'com.synisys.idm', name: 'entity-persistence-api',
+            version: project.ext.'entity-persistence-api') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+    compile(group: 'com.synisys.idm', name: 'entity-persistence-impl',
+            version: project.ext.'entity-persistence-impl') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+
+    //reactor
+    compile(group: 'io.projectreactor', name: 'reactor-core', version: '3.1.6.RELEASE')
+
+    compile(group: 'com.zaxxer', name: 'HikariCP', version: '3.2.0')
+
+    //permission
+    compile(group: 'com.synisys.idm', name: 'idm-um-permission-client', version: project.ext.'idm-um-permission-client')
+    compile(group: 'com.synisys.idm', name: 'idm-um-permission-api', version: project.ext.'idm-um-permission-api')
+
+    compile(group: 'io.lettuce', name: 'lettuce-core', version: '5.1.5.RELEASE')
+    //kb
+    compile(group: 'com.synisys.idm', name: 'kb-service-api', version: project.ext.'kb-service-api') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+    compile(group: 'com.synisys.idm', name: 'kb-service-client', version: project.ext.'kb-service-client') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+    testCompile(group: 'com.synisys.idm', name: 'kb-service-server', version: project.ext.'kb-service-server') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+
+    //shared
+    compile(group: 'com.synisys.skynet', name: 'common-security', version: project.ext.'common-security')
+    compile(group: 'com.synisys.idm', name: 'shared-concepts', version: project.ext.'shared-concepts')
+
+    //lock
+    compile(group: 'com.synisys.idm', name: 'lock-management-api', version: project.ext.'lock-management-api') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+    compile(group: 'com.synisys.idm', name: 'lock-management-client', version: project.ext.'lock-management-client') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+
+    //classifier
+    compile(group: 'com.synisys.idm', name: 'classifier-service-api',
+            version: project.ext.'classifier-service-api') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+    compile(group: 'com.synisys.idm', name: 'classifier-service-client',
+            version: project.ext.'classifier-service-client') {
+        exclude(module: 'skynet-shared-concepts')
+    }
+
+    //message language
+    compile(group: 'com.synisys.idm', name: 'idm-message-language-service-api',
+            version: project.ext.'idm-message-language-service-api')
+
+
+    compile(group: 'com.h2database', name: 'h2', version: '1.4.195')
+    compile(group: 'com.github.jknack', name: 'handlebars', version: '4.0.4')
+    compile(group: 'org.apache.poi', name: 'poi', version: '3.15-beta2')
+
+    compile(group: 'uk.com.robust-it', name: 'cloning', version: '1.9.2')
+    compile(group: 'org.jsoup', name: 'jsoup', version: '1.7.3')
+    compile(group: 'com.synisys', name: 'utility', version: '0.2.9')
+    compile(group: 'commons-lang', name: 'commons-lang', version: '2.6')
+    compile(group: 'commons-io', name: 'commons-io', version: '2.4')
+    compile(group: 'org.codehaus.jackson', name: 'jackson-mrbean', version: '1.9.13')
+    compile(group: 'org.springframework', name: 'spring-context', version: project.ext.'spring-context')
+    compile(group: 'org.springframework', name: 'spring-web', version: project.ext.'spring-web')
+    compile(group: 'org.springframework.security', name: 'spring-security-core', version: '4.1.3.RELEASE')
+    compile(group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0')
+
+
+    testCompile(group: 'org.springframework', name: 'spring-test', version: project.ext.'spring-test')
+}

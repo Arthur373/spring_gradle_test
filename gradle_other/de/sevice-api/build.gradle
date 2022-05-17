@@ -1,0 +1,9 @@
+description = ''
+dependencies {
+    compile(group: 'com.synisys.idm', name: 'shared-concepts', version: project.ext.'shared-concepts')
+    compile(group: 'com.synisys.skynet', name: 'common-entities', version: project.ext.'common-entities')
+    compile(group: 'com.synisys.skynet', name: 'common-security', version: project.ext.'common-security')
+    compile(group: 'com.synisys.idm', name: 'kb-service-api', version: project.ext.'kb-service-api')
+    compile(group: 'com.synisys.idm', name: 'validation-calculation-service-api',
+            version: project.ext.'validation-calculation-service-api')
+}

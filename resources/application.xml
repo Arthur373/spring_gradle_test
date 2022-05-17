@@ -7,10 +7,18 @@
                             http://www.springframework.org/schema/context
                             http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-    <context:annotation-config/>
+<!--    <context:annotation-config/>-->
+
+    <context:component-scan base-package="com.example.springgradle"/>
+
     <context:property-placeholder location="classpath:application.properties"/>
 
-    <bean class="com.example.springgradle.bpp.InjectBeanPostProcessor"/>
+
+
+
+<!--    <bean class="com.example.springgradle.bpp.InjectBeanPostProcessor"/>-->
+<!--    <bean class="com.example.springgradle.bpp.TransactionBeanPostProcessor"/>-->
+
 <!--    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">-->
 <!--        <property name="locations" value="classpath:application.properties"/>-->
 <!--    </bean>-->
@@ -19,43 +27,45 @@
 
 
     <bean id="s1" class="java.lang.String">
-        <constructor-arg type="java.lang.String" value="hello">
-
-        </constructor-arg>
+        <constructor-arg type="java.lang.String" value="hello"/>
     </bean>
 
     <!--          init-method="init" destroy-method="destroy"-->
+<!--    <bean id="pool1"  class="com.example.springgradle.pool.ConnectionPool"/>-->
     <bean id="pool" name="p1,p2,p3"  class="com.example.springgradle.pool.ConnectionPool">
         <constructor-arg name="username" type="java.lang.String" value="${db.username}"/>
-        <constructor-arg name="poolSize"  value="+${db.pool.size}"/>
-        <constructor-arg name="args">
-            <list>
-                <value>value1</value>
-                <value>value2</value>
-                <ref bean="s1"/>
-            </list>
-        </constructor-arg>
-        <constructor-arg name="properties">
+        <constructor-arg name="poolSize"  value="${db.pool.size}"/>
+<!--        <constructor-arg name="args">-->
+<!--            <list>-->
+<!--                <value>value1</value>-->
+<!--                <value>value2</value>-->
+<!--                <ref bean="s1"/>-->
+<!--            </list>-->
+<!--        </constructor-arg>-->
+<!--        <constructor-arg name="properties">-->
+<!--&lt;!&ndash;            <map>&ndash;&gt;-->
+<!--&lt;!&ndash;                <entry key="login" value="postUrl"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                <entry key="password" value="123456"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                <entry key="s1" value-ref="s1"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            </map>&ndash;&gt;-->
+<!--            <null/>-->
+<!--        </constructor-arg>-->
+
+<!--        <property name="properties">-->
 <!--            <map>-->
 <!--                <entry key="login" value="postUrl"/>-->
-<!--                <entry key="password" value="123456"/>-->
+<!--&lt;!&ndash;                <entry key="password" value="#{db.password}"/>&ndash;&gt;-->
 <!--                <entry key="s1" value-ref="s1"/>-->
+<!--&lt;!&ndash;                <entry key="asd" value="#{s1.length() > T(Math).random()}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                <entry key="hosts" value="#{'${db.hosts}'.split(',')}"/>&ndash;&gt;-->
 <!--            </map>-->
-            <null/>
-        </constructor-arg>
-
-        <property name="properties">
-            <map>
-                <entry key="login" value="postUrl"/>
-<!--                <entry key="password" value="#{db.password}"/>-->
-                <entry key="s1" value-ref="s1"/>
-<!--                <entry key="asd" value="#{s1.length() > T(Math).random()}"/>-->
-<!--                <entry key="hosts" value="#{'${db.hosts}'.split(',')}"/>-->
-            </map>
-        </property>
+<!--        </property>-->
     </bean>
 
-    <bean id="companyRepository" class="com.example.springgradle.repositories.CompanyRepository"/>
+
+
+
+<!--    <bean id="companyRepository" class="com.example.springgradle.repositories.CompanyRepository"/>-->
 
 <!--    <bean id="companyRepository" class="com.example.springgradle.repositories.CompanyRepository" factory-method="of">-->
 <!--        <constructor-arg ref="pool"/>-->
